@@ -22,7 +22,7 @@ class BankAccount:
         print(f"Account Balance: ${self.balance}")
 
 
-# Contoh penggunaan
+
 account = BankAccount("123456789", "John Doe", 1000)
 account.deposit(500)
 account.withdraw(200)
