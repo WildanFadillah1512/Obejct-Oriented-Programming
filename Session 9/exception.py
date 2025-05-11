@@ -5,22 +5,22 @@ class CourseRegistrationError(Exception):
 
 class CourseNotAvailableError(CourseRegistrationError):
     def __init__(self, course):
-        message = f"⚠️ Mata kuliah '{course}' tidak tersedia dalam semester ini."
+        message = f"⚠️ The course '{course}' is not offered this semester."
         super().__init__(message)
 
 class MaxSKSExceededError(CourseRegistrationError):
-    def __init__(self, message="⚠️ Jumlah SKS melebihi batas maksimal (24 SKS)."):
+    def __init__(self, message="⚠️ The number of credits exceeds the maximum limit (24 credits)."):
         super().__init__(message)
 
 class UnpaidTuitionError(CourseRegistrationError):
-    def __init__(self, message="❌ Mahasiswa belum membayar UKT. Silakan bayar UKT terlebih dahulu."):
+    def __init__(self, message="❌ The student has not paid the tuition. Please pay the tuition first."):
         super().__init__(message)
 
 class CourseAlreadyRegisteredError(CourseRegistrationError):
-    def __init__(self, message="❗ Mata kuliah sudah pernah dipilih sebelumnya."):
+    def __init__(self, message="❗ The course has already been registered."):
         super().__init__(message)
 
-# Simulasi sistem pendaftaran
+# Course registration simulation
 class Student:
     def __init__(self, name, tuition_paid):
         self.name = name
@@ -41,9 +41,9 @@ class Student:
 
         self.registered_courses.append(course)
         self.total_sks += sks
-        print(f"✅ Berhasil mendaftar mata kuliah {course.title()} ({sks} SKS). Total SKS: {self.total_sks}")
+        print(f"✅ Successfully registered for {course.title()} ({sks} credits). Total credits: {self.total_sks}")
 
-# Program utama
+# Main program
 def main():
     available_courses = {
         "algoritma dan pemrograman": 3,
@@ -59,15 +59,15 @@ def main():
         "keamanan siber": 3
     }
 
-    print("=== SISTEM PENDAFTARAN MATA KULIAH TEKNIK INFORMATIKA ===")
-    nama = input("Masukkan nama mahasiswa: ")
+    print("=== COMPUTER SCIENCE COURSE REGISTRATION SYSTEM ===")
+    nama = input("Enter student name: ")
 
-    # Validasi input y/n
+    # Validate y/n input
     while True:
-        status_ukt = input("Apakah UKT sudah dibayar? (y/n): ").lower().strip()
+        status_ukt = input("Has the tuition been paid? (y/n): ").lower().strip()
         if status_ukt in ('y', 'n'):
             break
-        print("⚠️ Masukkan hanya 'y' untuk ya atau 'n' untuk tidak.")
+        print("⚠️ Please enter 'y' for yes or 'n' for no.")
 
     tuition_paid = status_ukt == 'y'
     mahasiswa = None
@@ -79,13 +79,13 @@ def main():
             raise UnpaidTuitionError()
 
         while True:
-            print("\n📚 Daftar mata kuliah tersedia:")
+            print("\n📚 Available courses:")
             for course, sks in available_courses.items():
-                print(f"- {course.title()} ({sks} SKS)")
+                print(f"- {course.title()} ({sks} credits)")
 
-            course_input = input("\nMasukkan nama mata kuliah (atau ketik 'selesai' untuk keluar): ").lower().strip()
+            course_input = input("\nEnter course name (or type 'done' to exit): ").lower().strip()
 
-            if course_input == "selesai":
+            if course_input == "done":
                 break
 
             try:
@@ -96,7 +96,7 @@ def main():
                 mahasiswa.register_course(course_input, sks, available_courses)
 
                 if mahasiswa.total_sks == mahasiswa.max_sks:
-                    print("🛑 Batas maksimal SKS telah tercapai.")
+                    print("🛑 Maximum credit limit reached.")
                     break
 
             except CourseRegistrationError as e:
@@ -105,16 +105,16 @@ def main():
     except CourseRegistrationError as e:
         print(e)
     finally:
-        print("\n📌 Pendaftaran selesai.")
-        print(f"Mahasiswa: {nama}")
-        print("Mata kuliah yang terdaftar:")
+        print("\n📌 Registration completed.")
+        print(f"Student: {nama}")
+        print("Registered courses:")
         if mahasiswa and mahasiswa.registered_courses:
             for mk in mahasiswa.registered_courses:
                 print(f"- {mk.title()}")
         else:
-            print("Belum ada mata kuliah yang didaftarkan.")
+            print("No courses have been registered.")
         if mahasiswa:
-            print(f"Total SKS yang diambil: {mahasiswa.total_sks} / {mahasiswa.max_sks}")
+            print(f"Total credits: {mahasiswa.total_sks} / {mahasiswa.max_sks}")
 
 if __name__ == "__main__":
     main()
