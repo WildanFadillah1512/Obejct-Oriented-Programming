@@ -1,0 +1,32 @@
+from datetime import date
+
+class Student:
+    university = "Nusa Putra University"
+
+    def __init__(self, name, enrollment_year):
+        self.name = name
+        self.enrollment_year = enrollment_year
+
+    @classmethod
+    def from_batch(cls, name, batch):
+        current_year = date.today().year
+        enrollment_year = current_year - (batch - 1)
+        return cls(name, enrollment_year)
+
+    @staticmethod
+    def validate_enrollment_year(year):
+        current_year = date.today().year
+        return 2000 <= year <= current_year
+
+    def study_duration(self):
+        return date.today().year - self.enrollment_year
+
+
+print("Is 2023 a valid year?", Student.validate_enrollment_year(2023)) 
+
+student1 = Student.from_batch("Wildan", 3)  
+
+print("Student Name:", student1.name)
+print("Enrollment Year:", student1.enrollment_year)
+print("Study Duration:", student1.study_duration(), "years")
+print("University:", student1.university)
